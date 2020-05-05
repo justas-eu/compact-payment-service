@@ -1,9 +1,15 @@
 version: 2.1
 
-orbs:
-  maven: circleci/maven@0.0.12
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8u242-jdk
 
-workflows:
-  maven_test:
-    jobs:
-      - maven/test # checkout, build, test, and upload test results
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "pom.xml" }}
+      - run:
+          name: Perform Build
+          command: mvn -T 1C clean install
