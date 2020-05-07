@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class PaymentRepository {
@@ -22,5 +24,16 @@ public class PaymentRepository {
 
     public long getCount() {
         return paymentMap.size();
+    }
+
+    public Optional<Payment> findById(UUID id) {
+
+        Payment payment = paymentMap.get(id.toString());
+        if (payment != null) {
+            return Optional.of(payment);
+        } else {
+            return Optional.empty();
+        }
+
     }
 }

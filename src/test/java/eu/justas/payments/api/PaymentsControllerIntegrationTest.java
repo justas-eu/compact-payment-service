@@ -2,7 +2,9 @@ package eu.justas.payments.api;
 
 import com.google.gson.Gson;
 import eu.justas.payments.api.req.CreatePaymentRequest;
+import eu.justas.payments.domain.Payment;
 import eu.justas.payments.usecases.CreatePayment;
+import eu.justas.payments.usecases.QueryPayments;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import static eu.justas.payments.api.req.PaymentRequestFixture.paymentRequest;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,6 +31,9 @@ public class PaymentsControllerIntegrationTest {
 
     @MockBean
     private CreatePayment createPayment;
+
+    @MockBean
+    private QueryPayments queryPayments;
 
     @Test
     public void creates_payment() throws Exception {
@@ -46,5 +54,30 @@ public class PaymentsControllerIntegrationTest {
                 eq(paymentRequest.getAmount()),
                 eq(paymentRequest.getDebtorIban()),
                 eq(paymentRequest.getCreditorIban()));
+    }
+
+    @Test
+    public void find_payment_by_id() throws Exception {
+
+        Gson gson = new Gson();
+        CreatePaymentRequest paymentRequest = paymentRequest();
+        String paymentRequestJsonString = gson.toJson(paymentRequest);
+
+        Payment foundPayment = new Payment();
+        Optional<Payment> found = Optional.of(foundPayment);
+        when(queryPayments.findById(any())).thenReturn(found);
+
+        mvc.perform(
+                post("/payments")
+                        .contentType("application/json")
+                        .content(paymentRequestJsonString))
+                .andExpect(status().isCreated());
+
+        String paymentId = UUID.randomUUID().toString();
+        mvc.perform(
+                get("/payments/" + paymentId))
+                .andExpect(status().isOk());
+
+
     }
 }

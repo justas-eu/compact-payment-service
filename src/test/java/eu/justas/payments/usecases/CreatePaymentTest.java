@@ -14,34 +14,30 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class CreatePaymentTest {
 
     PaymentRepository repository;
-
+    CreatePayment createPayment;
 
     @Before
     public void setUp() {
         repository = new PaymentRepository();
+        createPayment = new CreatePayment(repository);
     }
 
     @Test
     public void can_add_payment() {
 
-        CreatePayment createPayment = new CreatePayment(repository);
         String typeString = PaymentType.TYPE1.toString();
         String currency = "EUR";
-        Double ammount = 0.11;
+        Double amount = 0.11;
         String debtorIban = "debtorIban";
         String creditorIban = "creditorIban";
-        Payment created = createPayment.create(typeString, currency, ammount, debtorIban, creditorIban);
+        Payment created = createPayment.create(typeString, currency, amount, debtorIban, creditorIban);
 
         assertNotNull(UUID.fromString(created.getId()));
         assertEquals(typeString, created.getType().toString());
         assertEquals(currency, created.getCurrency());
-        assertEquals(ammount, created.getAmount());
+        assertEquals(amount, created.getAmount());
         assertEquals(debtorIban, created.getDebtorIban());
         assertEquals(creditorIban, created.getCreditorIban());
         assertEquals(1, repository.getCount());
-
-
-
     }
-
 }
