@@ -1,23 +1,25 @@
 package eu.justas.payments.api.req;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 public class CreatePaymentRequest {
 
-    @NotBlank(message = "Type must not be blank!")
+    @NotBlank(message = "Type must not be blank")
     String type;
 
-    @NotNull(message = "Amount must not be blank!")
+    @NotNull(message = "Amount must not be blank")
+    @Digits(integer = 10, fraction = 2)
+    @DecimalMin("0.01")
     Double amount;
 
-    @NotBlank(message = "Currency must not be blank!")
+    @NotBlank(message = "Currency must not be blank")
+    @Pattern(regexp="^(USD|EUR)$",message="Invalid currency code. Valid USD or EUR")
     String currency;
 
-    @NotBlank(message = "Debtor IBAN must not be blank!")
+    @NotBlank(message = "Debtor IBAN must not be blank")
     String debtorIban;
 
-    @NotBlank(message = "Creditor IBAN must not be blank!")
+    @NotBlank(message = "Creditor IBAN must not be blank")
     String creditorIban;
 
     public String getType() {

@@ -2,17 +2,37 @@ package eu.justas.payments.domain;
 
 public class Payment {
 
-    String type;
+    String id;
+    PaymentType type;
     Double amount;
     String currency;
     String debtorIban;
     String creditorIban;
 
-    public String getType() {
+    public Payment() {
+    }
+
+    public Payment(PaymentType type, Double amount, String currency, String debtorIban, String creditorIban) {
+        this.type = type;
+        this.amount = amount;
+        this.currency = currency;
+        this.debtorIban = debtorIban;
+        this.creditorIban = creditorIban;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public PaymentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(PaymentType type) {
         this.type = type;
     }
 
