@@ -1,5 +1,6 @@
 package eu.justas.payments.usecases;
 
+import eu.justas.payments.db.PaymentRepository;
 import eu.justas.payments.domain.Payment;
 import eu.justas.payments.domain.PaymentType;
 import org.springframework.stereotype.Component;
@@ -9,11 +10,19 @@ import java.util.UUID;
 @Component
 public class CreatePayment {
 
+    PaymentRepository repository;
+
+    public CreatePayment(PaymentRepository repository) {
+        this.repository = repository;
+    }
+
     public Payment create(String type, String currency, Double amount, String debtorIban, String creditorIban) {
 
-        //        repository.add(payment);
+        Payment payment = populatePayment(type, currency, amount, debtorIban, creditorIban);
 
-        return populatePayment(type, currency, amount, debtorIban, creditorIban);
+        repository.add(payment);
+
+        return payment;
 
     }
 
