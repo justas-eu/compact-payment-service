@@ -47,5 +47,4 @@ public class PaymentsControllerIntegrationTest {
                 eq(paymentRequest.getDebtorIban()),
                 eq(paymentRequest.getCreditorIban()));
     }
-
 }
