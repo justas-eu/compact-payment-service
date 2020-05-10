@@ -12,7 +12,7 @@ jobs:
             - cache-{{ checksum "pom.xml" }}
       - run:
           name: Perform Build
-          command: mvn -T 1C clean install
+          command: mvn -T 1C clean install test jacoco:report coveralls:report -DrepoToken=${COVERALLS_TOKEN}
       - persist_to_workspace:
           root: target
           paths:
