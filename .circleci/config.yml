@@ -31,11 +31,7 @@ jobs:
       - run:
           name: Upload WAR file
           command: |
-            ls
-            pwd
-            ls *
-            scp -v payments-0.0.1-SNAPSHOT.jar "${DEPLOY_SERVER}"
-            ls
+            scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null payments-0.0.1-SNAPSHOT.jar "${DEPLOY_SERVER}"
 
 workflows:
   build-deploy:
