@@ -13,3 +13,30 @@ jobs:
       - run:
           name: Perform Build
           command: mvn -T 1C clean install
+      - persist_to_workspace:
+          root: target
+          paths:
+            - payments-0.0.1-SNAPSHOT.jar
+
+  deploy:
+    docker:
+      - image: circleci/buildpack-deps:stable-curl
+    working_directory: ~/work
+    steps:
+      - attach_workspace:
+          at: ~/work
+      - add_ssh_keys:
+          fingerprints:
+            - "$DEPLOY_FINGERPRINT"
+      - run:
+          name: Upload WAR file
+          command: |
+            scp payments-0.0.1-SNAPSHOT.jar $DEPLOY_SERVER
+
+workflows:
+  build-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
