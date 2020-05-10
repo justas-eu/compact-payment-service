@@ -31,8 +31,8 @@ jobs:
       - run:
           name: Upload WAR file
           command: |
-            scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null payments-0.0.1-SNAPSHOT.jar "${DEPLOY_SERVER}"
-
+            scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null payments-0.0.1-SNAPSHOT.jar "${DEPLOY_SERVER_SCP}"
+            ssh -o StrictHostKeyChecking=no "${DEPLOY_SERVER_SSH}" './stop.sh && start.sh'
 workflows:
   build-deploy:
     jobs:
