@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static eu.justas.payments.usecases.fixtures.PaymentFixture.payment;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class QueryPaymentsTest {
 
@@ -32,6 +32,13 @@ public class QueryPaymentsTest {
         Optional<Payment> paymentOptional = queryPayments.findById(id);
 
         assertTrue(paymentOptional.isPresent());
+        Payment paymentFound = paymentOptional.get();
+        assertNotNull(UUID.fromString(paymentFound.getId()));
+        assertEquals(payment.getType().toString(), paymentFound.getType().toString());
+        assertEquals(payment.getCurrency(), paymentFound.getCurrency());
+        assertEquals(payment.getAmount(), paymentFound.getAmount());
+        assertEquals(payment.getDebtorIban(), paymentFound.getDebtorIban());
+        assertEquals(payment.getCreditorIban(), paymentFound.getCreditorIban());
 
     }
 }

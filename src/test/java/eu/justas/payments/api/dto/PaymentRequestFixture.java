@@ -1,4 +1,4 @@
-package eu.justas.payments.api.req;
+package eu.justas.payments.api.dto;
 
 public class PaymentRequestFixture {
 

@@ -17,8 +17,6 @@ public class QueryPayments {
     }
 
     public Optional<Payment> findById(UUID id) {
-
         return repository.findById(id);
-
     }
 }

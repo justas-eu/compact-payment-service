@@ -1,26 +1,22 @@
-package eu.justas.payments.api.req;
+package eu.justas.payments.api.dto;
 
-import javax.validation.constraints.*;
+public class PaymentResponse {
 
-public class CreatePaymentRequest {
-
-    @NotBlank(message = "Type must not be blank")
+    String id;
     String type;
-
-    @NotNull(message = "Amount must not be blank")
-    @Digits(integer = 10, fraction = 2)
-    @DecimalMin("0.01")
     Double amount;
-
-    @NotBlank(message = "Currency must not be blank")
-    @Pattern(regexp="^(USD|EUR)$",message="Invalid currency code. Valid USD or EUR")
     String currency;
-
-    @NotBlank(message = "Debtor IBAN must not be blank")
     String debtorIban;
-
-    @NotBlank(message = "Creditor IBAN must not be blank")
     String creditorIban;
+    Double cancellationFee;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getType() {
         return type;
@@ -62,5 +58,11 @@ public class CreatePaymentRequest {
         this.creditorIban = creditorIban;
     }
 
+    public Double getCancellationFee() {
+        return cancellationFee;
+    }
 
+    public void setCancellationFee(Double cancellationFee) {
+        this.cancellationFee = cancellationFee;
+    }
 }

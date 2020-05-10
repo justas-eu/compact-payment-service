@@ -1,7 +1,7 @@
 package eu.justas.payments.api;
 
 import com.google.gson.Gson;
-import eu.justas.payments.api.req.CreatePaymentRequest;
+import eu.justas.payments.api.dto.CreatePaymentRequest;
 import eu.justas.payments.domain.Payment;
 import eu.justas.payments.usecases.CreatePayment;
 import eu.justas.payments.usecases.QueryPayments;
@@ -16,10 +16,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Optional;
 import java.util.UUID;
 
-import static eu.justas.payments.api.req.PaymentRequestFixture.paymentRequest;
+import static eu.justas.payments.api.dto.PaymentRequestFixture.paymentRequest;
+import static eu.justas.payments.usecases.fixtures.PaymentFixture.payment;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -63,7 +67,7 @@ public class PaymentsControllerIntegrationTest {
         CreatePaymentRequest paymentRequest = paymentRequest();
         String paymentRequestJsonString = gson.toJson(paymentRequest);
 
-        Payment foundPayment = new Payment();
+        Payment foundPayment = payment();
         Optional<Payment> found = Optional.of(foundPayment);
         when(queryPayments.findById(any())).thenReturn(found);
 
@@ -76,8 +80,7 @@ public class PaymentsControllerIntegrationTest {
         String paymentId = UUID.randomUUID().toString();
         mvc.perform(
                 get("/payments/" + paymentId))
-                .andExpect(status().isOk());
-
-
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(matchesPattern("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))));
     }
 }

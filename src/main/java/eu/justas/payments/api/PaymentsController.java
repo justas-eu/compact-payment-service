@@ -1,6 +1,10 @@
 package eu.justas.payments.api;
 
-import eu.justas.payments.api.req.CreatePaymentRequest;
+import eu.justas.payments.api.dto.CreatePaymentRequest;
+import eu.justas.payments.api.dto.PaymentConverter;
+import eu.justas.payments.api.dto.PaymentResponse;
+import eu.justas.payments.domain.Payment;
+import eu.justas.payments.usecases.CalculateCancellationFee;
 import eu.justas.payments.usecases.CreatePayment;
 import eu.justas.payments.usecases.QueryPayments;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -37,8 +42,13 @@ public class PaymentsController {
     }
 
     @RequestMapping(value="/{paymentId}", method = GET)
-    public void findById(@PathVariable("paymentId") @NotNull UUID paymentId) {
-        queryPayments.findById(paymentId);
-
+    public PaymentResponse findById(@PathVariable("paymentId") @NotNull UUID paymentId) {
+        Optional<Payment> payment = queryPayments.findById(paymentId);
+        if (payment.isPresent()) {
+            Double  cancelationFee = CalculateCancellationFee.calculate(payment.get());
+            return PaymentConverter.convert(payment.get(), cancelationFee);
+        } else {
+            return new PaymentResponse();
+        }
     }
 }

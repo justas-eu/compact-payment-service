@@ -19,7 +19,8 @@ public class PaymentRepository {
 
     public void add(Payment payment) {
         LOG.trace("Persisting payment id={}", payment.getId());
-        paymentMap.put(payment.getId(), payment);
+        Payment copy = payment.copy();
+        paymentMap.put(payment.getId(), copy);
     }
 
     public long getCount() {

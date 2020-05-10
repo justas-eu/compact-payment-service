@@ -67,4 +67,17 @@ public class Payment {
     public void setCreditorIban(String creditorIban) {
         this.creditorIban = creditorIban;
     }
+
+    public Payment copy() {
+        Payment copy = new Payment();
+
+        copy.setId(this.getId());
+        copy.setAmount(this.getAmount());
+        copy.setType(this.getType());
+        copy.setCurrency(this.getCurrency());
+        copy.setDebtorIban(this.getDebtorIban());
+        copy.setCreditorIban(this.getCreditorIban());
+
+        return this;
+    }
 }
