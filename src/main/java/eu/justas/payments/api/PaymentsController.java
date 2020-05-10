@@ -25,11 +25,14 @@ public class PaymentsController {
 
     private final CreatePayment createPayment;
     private final QueryPayments queryPayments;
+    private final CalculateCancellationFee calculateCancellationFee;
+
 
     @Autowired
-    public PaymentsController(CreatePayment createPayment, QueryPayments queryPayments) {
+    public PaymentsController(CreatePayment createPayment, QueryPayments queryPayments,CalculateCancellationFee calculateCancellationFee ) {
         this.createPayment = createPayment;
         this.queryPayments = queryPayments;
+        this.calculateCancellationFee = calculateCancellationFee;
     }
 
     @RequestMapping(method = POST)
@@ -46,8 +49,8 @@ public class PaymentsController {
     public PaymentResponse findById(@PathVariable("paymentId") @NotNull UUID paymentId) {
         Optional<Payment> payment = queryPayments.findById(paymentId);
         if (payment.isPresent()) {
-            Double  cancelationFee = CalculateCancellationFee.calculate(payment.get());
-            return PaymentConverter.convert(payment.get(), cancelationFee);
+            Double  cancellationFee = calculateCancellationFee.calculate(payment.get());
+            return PaymentConverter.convert(payment.get(), cancellationFee);
         } else {
             return new PaymentResponse();
         }

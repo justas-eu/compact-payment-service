@@ -1,5 +1,7 @@
 package eu.justas.payments.domain;
 
+import java.time.LocalDateTime;
+
 public class Payment {
 
     String id;
@@ -8,16 +10,18 @@ public class Payment {
     String currency;
     String debtorIban;
     String creditorIban;
+    LocalDateTime createdAt = LocalDateTime.now();
 
     public Payment() {
     }
 
-    public Payment(PaymentType type, Double amount, String currency, String debtorIban, String creditorIban) {
+    public Payment(PaymentType type, Double amount, String currency, String debtorIban, String creditorIban, LocalDateTime createdAt) {
         this.type = type;
         this.amount = amount;
         this.currency = currency;
         this.debtorIban = debtorIban;
         this.creditorIban = creditorIban;
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -68,6 +72,14 @@ public class Payment {
         this.creditorIban = creditorIban;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Payment copy() {
         Payment copy = new Payment();
 
@@ -77,6 +89,7 @@ public class Payment {
         copy.setCurrency(this.getCurrency());
         copy.setDebtorIban(this.getDebtorIban());
         copy.setCreditorIban(this.getCreditorIban());
+        copy.setCreatedAt(this.getCreatedAt());
 
         return this;
     }

@@ -3,6 +3,7 @@ package eu.justas.payments.api;
 import com.google.gson.Gson;
 import eu.justas.payments.api.dto.CreatePaymentRequest;
 import eu.justas.payments.domain.Payment;
+import eu.justas.payments.usecases.CalculateCancellationFee;
 import eu.justas.payments.usecases.CreatePayment;
 import eu.justas.payments.usecases.QueryPayments;
 import org.junit.Test;
@@ -38,6 +39,9 @@ public class PaymentsControllerIntegrationTest {
     @MockBean
     private QueryPayments queryPayments;
 
+    @MockBean
+    private CalculateCancellationFee calculateCancellationFee;
+
     @Test
     public void creates_payment() throws Exception {
 
@@ -71,9 +75,12 @@ public class PaymentsControllerIntegrationTest {
         String paymentRequestJsonString = gson.toJson(paymentRequest);
 
         Payment foundPayment = payment();
+        foundPayment.setCreatedAt(foundPayment.getCreatedAt().minusHours(5).minusMinutes(30));
+
         Optional<Payment> found = Optional.of(foundPayment);
         when(queryPayments.findById(any())).thenReturn(found);
         when(createPayment.create(any(),any(),any(),any(),any())).thenReturn(payment());
+        when(calculateCancellationFee.calculate(any())).thenCallRealMethod();
 
         mvc.perform(
                 post("/payments")
@@ -85,6 +92,7 @@ public class PaymentsControllerIntegrationTest {
         mvc.perform(
                 get("/payments/" + paymentId))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.cancellationFee", is(0.25)))
                 .andExpect(jsonPath("$.id", is(matchesPattern("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))));
     }
 }

@@ -3,7 +3,7 @@ package eu.justas.payments.api.dto;
 import eu.justas.payments.domain.Payment;
 
 public class PaymentConverter {
-    public static PaymentResponse convert(Payment payment, Double cancelationFee) {
+    public static PaymentResponse convert(Payment payment, Double cancellationFee) {
 
         PaymentResponse response = new PaymentResponse();
         response.setId(payment.getId());
@@ -12,7 +12,8 @@ public class PaymentConverter {
         response.setCurrency(payment.getCurrency());
         response.setDebtorIban(payment.getDebtorIban());
         response.setCreditorIban(payment.getCreditorIban());
-        response.setCancellationFee(cancelationFee);
+        response.setCreatedAt(payment.getCreatedAt());
+        response.setCancellationFee(cancellationFee);
 
         return response;
     }

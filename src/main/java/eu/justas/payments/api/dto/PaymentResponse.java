@@ -1,5 +1,7 @@
 package eu.justas.payments.api.dto;
 
+import java.time.LocalDateTime;
+
 public class PaymentResponse {
 
     String id;
@@ -9,6 +11,7 @@ public class PaymentResponse {
     String debtorIban;
     String creditorIban;
     Double cancellationFee;
+    LocalDateTime createdAt;
 
     public String getId() {
         return id;
@@ -64,5 +67,13 @@ public class PaymentResponse {
 
     public void setCancellationFee(Double cancellationFee) {
         this.cancellationFee = cancellationFee;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
