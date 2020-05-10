@@ -32,7 +32,7 @@ jobs:
           name: Upload WAR file
           command: |
             scp -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null payments-0.0.1-SNAPSHOT.jar "${DEPLOY_SERVER_SCP}"
-            ssh -o StrictHostKeyChecking=no "${DEPLOY_SERVER_SSH}" './stop.sh && ./start.sh'
+            ssh -o StrictHostKeyChecking=no "${DEPLOY_SERVER_SSH}" './stop.sh && nohup  ./start.sh > log.out 2> log.err < /dev/null & '
 workflows:
   build-deploy:
     jobs:
