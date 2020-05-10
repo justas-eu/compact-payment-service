@@ -34,7 +34,7 @@ jobs:
             ls
             pwd
             ls *
-            scp payments-0.0.1-SNAPSHOT.jar "${DEPLOY_SERVER}"
+            scp -v payments-0.0.1-SNAPSHOT.jar "${DEPLOY_SERVER}"
             ls
 
 workflows:
