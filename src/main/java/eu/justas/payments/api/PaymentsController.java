@@ -34,10 +34,11 @@ public class PaymentsController {
 
     @RequestMapping(method = POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@Valid
+    public String create(@Valid
                            @RequestBody CreatePaymentRequest req) {
 
-        createPayment.create(req.getType(), req.getCurrency(), req.getAmount(), req.getDebtorIban(), req.getCreditorIban());
+        Payment payment = createPayment.create(req.getType(), req.getCurrency(), req.getAmount(), req.getDebtorIban(), req.getCreditorIban());
+        return payment.getId();
 
     }
 

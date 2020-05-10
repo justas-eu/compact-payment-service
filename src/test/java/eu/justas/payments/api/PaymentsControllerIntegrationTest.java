@@ -23,8 +23,7 @@ import static org.hamcrest.Matchers.matchesPattern;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(PaymentsController.class)
@@ -45,12 +44,16 @@ public class PaymentsControllerIntegrationTest {
         Gson gson = new Gson();
         CreatePaymentRequest paymentRequest = paymentRequest();
         String paymentRequestJsonString = gson.toJson(paymentRequest);
+        when(createPayment.create(any(),any(),any(),any(),any())).thenReturn(payment());
+
 
         mvc.perform(
                 post("/payments")
                         .contentType("application/json")
                         .content(paymentRequestJsonString))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(content().string(is(matchesPattern("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))));
+
 
         verify(createPayment).create(
                 eq(paymentRequest.getType()),
@@ -70,6 +73,7 @@ public class PaymentsControllerIntegrationTest {
         Payment foundPayment = payment();
         Optional<Payment> found = Optional.of(foundPayment);
         when(queryPayments.findById(any())).thenReturn(found);
+        when(createPayment.create(any(),any(),any(),any(),any())).thenReturn(payment());
 
         mvc.perform(
                 post("/payments")
