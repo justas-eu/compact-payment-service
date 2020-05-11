@@ -9,6 +9,7 @@ import eu.justas.payments.usecases.CreatePayment;
 import eu.justas.payments.usecases.QueryPayments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -46,13 +47,14 @@ public class PaymentsController {
     }
 
     @RequestMapping(value="/{paymentId}", method = GET)
-    public PaymentResponse findById(@PathVariable("paymentId") @NotNull UUID paymentId) {
+    public ResponseEntity<?> findById(@PathVariable("paymentId") @NotNull UUID paymentId) {
         Optional<Payment> payment = queryPayments.findById(paymentId);
         if (payment.isPresent()) {
             Double  cancellationFee = calculateCancellationFee.calculate(payment.get());
-            return PaymentConverter.convert(payment.get(), cancellationFee);
+            PaymentResponse paymentResponse = PaymentConverter.convert(payment.get(), cancellationFee);
+            return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
         } else {
-            return new PaymentResponse();
+            return new ResponseEntity<>(String.format("Payment with id %s not found", paymentId), HttpStatus.NOT_FOUND);
         }
     }
 }
