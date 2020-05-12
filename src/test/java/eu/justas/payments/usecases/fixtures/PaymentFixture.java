@@ -16,9 +16,10 @@ public class PaymentFixture {
         payment.setId(UUID.randomUUID().toString());
         payment.setAmount(11.11);
         payment.setType(TYPE1);
-        payment.setCurrency("USD");
+        payment.setCurrency("EUR");
         payment.setCreditorIban("CreditorIban");
         payment.setDebtorIban("DebtorIban");
+        payment.setDetails("details");
         return payment;
     }
     

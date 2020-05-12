@@ -22,6 +22,8 @@ public class CreatePaymentRequest {
     @NotBlank(message = "Creditor IBAN must not be blank")
     String creditorIban;
 
+    String details;
+
     public String getType() {
         return type;
     }
@@ -62,5 +64,11 @@ public class CreatePaymentRequest {
         this.creditorIban = creditorIban;
     }
 
+    public String getDetails() {
+        return details;
+    }
 
+    public void setDetails(String details) {
+        this.details = details;
+    }
 }

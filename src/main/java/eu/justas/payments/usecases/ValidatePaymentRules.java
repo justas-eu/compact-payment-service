@@ -6,6 +6,7 @@ import org.jeasy.rules.api.Facts;
 import org.jeasy.rules.api.Rule;
 import org.jeasy.rules.api.Rules;
 import org.jeasy.rules.core.RuleBuilder;
+import org.springframework.util.StringUtils;
 
 public class ValidatePaymentRules {
 
@@ -40,11 +41,22 @@ public class ValidatePaymentRules {
                 })
                 .build();
 
-        // define rules
+        Rule type1Details = new RuleBuilder()
+                .name("TYPE1 details field")
+                .description("TYPE1 has additional field 'details' (text) which is mandatory")
+                .when(facts -> facts.get("type").equals("TYPE1") && StringUtils.isEmpty(facts.get("details")))
+                .then(facts -> {
+                    validatablePayment.setValid(false);
+                    validatablePayment.setError(validatablePayment.getError() + "TYPE1 has additional field 'details' (text) which is mandatory. ");
+                })
+                .build();
+
+
         Rules rules = new Rules();
         rules.register(positiveAmount);
         rules.register(type1);
         rules.register(type2);
+        rules.register(type1Details);
         return rules;
     }
 
@@ -55,6 +67,7 @@ public class ValidatePaymentRules {
         facts.put("amountPositive", validatablePayment.isAmountPositive());
         facts.put("currency", payment.getCurrency());
         facts.put("type", payment.getType().toString());
+        facts.put("details", payment.getDetails());
         return facts;
     }
 }

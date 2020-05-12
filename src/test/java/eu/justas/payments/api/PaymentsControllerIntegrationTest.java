@@ -48,7 +48,7 @@ public class PaymentsControllerIntegrationTest {
         Gson gson = new Gson();
         CreatePaymentRequest paymentRequest = paymentRequest();
         String paymentRequestJsonString = gson.toJson(paymentRequest);
-        when(createPayment.create(any(),any(),any(),any(),any())).thenReturn(payment());
+        when(createPayment.create(any(),any(),any(),any(),any(), any())).thenReturn(payment());
 
 
         mvc.perform(
@@ -64,7 +64,8 @@ public class PaymentsControllerIntegrationTest {
                 eq(paymentRequest.getCurrency()),
                 eq(paymentRequest.getAmount()),
                 eq(paymentRequest.getDebtorIban()),
-                eq(paymentRequest.getCreditorIban()));
+                eq(paymentRequest.getCreditorIban()),
+                eq(paymentRequest.getDetails()));
     }
 
     @Test
@@ -79,7 +80,7 @@ public class PaymentsControllerIntegrationTest {
 
         Optional<Payment> found = Optional.of(foundPayment);
         when(queryPayments.findById(any())).thenReturn(found);
-        when(createPayment.create(any(),any(),any(),any(),any())).thenReturn(payment());
+        when(createPayment.create(any(),any(),any(),any(),any(), any())).thenReturn(payment());
 
 
         mvc.perform(

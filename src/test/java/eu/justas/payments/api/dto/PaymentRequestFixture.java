@@ -12,6 +12,7 @@ public class PaymentRequestFixture {
         request.setCurrency("USD");
         request.setCreditorIban("CreditorIban");
         request.setDebtorIban("DebtorIban");
+        request.setDetails("details");
         return request;
     }
 }

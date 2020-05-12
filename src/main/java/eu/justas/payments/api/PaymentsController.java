@@ -55,7 +55,8 @@ public class PaymentsController {
                     req.getCurrency(),
                     req.getAmount(),
                     req.getDebtorIban(),
-                    req.getCreditorIban());
+                    req.getCreditorIban(),
+                    req.getDetails());
         } catch (InvalidParameterException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

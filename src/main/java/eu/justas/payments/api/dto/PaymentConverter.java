@@ -12,6 +12,7 @@ public class PaymentConverter {
         response.setCurrency(payment.getCurrency());
         response.setDebtorIban(payment.getDebtorIban());
         response.setCreditorIban(payment.getCreditorIban());
+        response.setDetails(payment.getDetails());
         response.setCreatedAt(payment.getCreatedAt());
         response.setCancellationFee(cancellationFee);
 

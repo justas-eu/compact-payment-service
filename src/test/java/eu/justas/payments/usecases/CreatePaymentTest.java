@@ -30,7 +30,9 @@ public class CreatePaymentTest {
         Double amount = 0.11;
         String debtorIban = "debtorIban";
         String creditorIban = "creditorIban";
-        Payment created = createPayment.create(typeString, currency, amount, debtorIban, creditorIban);
+        String details = "details";
+
+        Payment created = createPayment.create(typeString, currency, amount, debtorIban, creditorIban, details);
 
         assertNotNull(UUID.fromString(created.getId()));
         assertEquals(typeString, created.getType().toString());
@@ -38,6 +40,7 @@ public class CreatePaymentTest {
         assertEquals(amount, created.getAmount());
         assertEquals(debtorIban, created.getDebtorIban());
         assertEquals(creditorIban, created.getCreditorIban());
+        assertEquals(details, created.getDetails());
         assertEquals(1, repository.getCount());
     }
 }

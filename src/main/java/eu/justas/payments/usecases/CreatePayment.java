@@ -20,9 +20,9 @@ public class CreatePayment {
         this.validatePayment =  new ValidatePayment();
     }
 
-    public Payment create(String type, String currency, Double amount, String debtorIban, String creditorIban) {
+    public Payment create(String type, String currency, Double amount, String debtorIban, String creditorIban, String details) {
 
-        Payment payment = populatePayment(type, currency, amount, debtorIban, creditorIban);
+        Payment payment = populatePayment(type, currency, amount, debtorIban, creditorIban, details);
 
         repository.add(payment);
 
@@ -35,7 +35,7 @@ public class CreatePayment {
         return payment;
     }
 
-    private Payment populatePayment(String type, String currency, Double amount, String debtorIban, String creditorIban) {
+    private Payment populatePayment(String type, String currency, Double amount, String debtorIban, String creditorIban, String details) {
         Payment payment = new Payment();
 
         PaymentType paymentType = PaymentType.valueOf(type);
@@ -45,6 +45,7 @@ public class CreatePayment {
         payment.setAmount(amount);
         payment.setDebtorIban(debtorIban);
         payment.setCreditorIban(creditorIban);
+        payment.setDetails(details);
 
         return payment;
     }

@@ -9,7 +9,6 @@ import org.junit.Test;
 import static eu.justas.payments.usecases.fixtures.PaymentFixture.payment;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class ValidatePaymentTest {
 
@@ -27,7 +26,7 @@ public class ValidatePaymentTest {
         payment.setAmount(-1.0);
         ValidatablePayment validatablePayment = validatePayment.validate(payment);
         assertThat(validatablePayment.isValid(), is(false));
-        assertTrue(validatablePayment.getError().contains("TYPE1 is only applicable for EUR payments."));
+        assertThat(validatablePayment.getError(), is("Amount must be positive. "));
     }
 
     @Test
@@ -57,4 +56,26 @@ public class ValidatePaymentTest {
         assertThat(validatablePayment.isValid(), is(false));
         assertThat(validatablePayment.getError(), is("TYPE2 is only applicable for USD payments. "));
     }
+
+    @Test
+    public void should_set_invalid_for_type1_without_details() {
+
+        Payment payment = payment();
+        payment.setDetails("");
+        ValidatablePayment validatablePayment = validatePayment.validate(payment);
+        assertThat(validatablePayment.isValid(), is(false));
+    }
+
+    @Test
+    public void should_set_valid_for_type2_without_details() {
+
+        Payment payment = payment();
+        payment.setType(PaymentType.TYPE2);
+        payment.setCurrency("USD");
+        payment.setDetails("");
+        ValidatablePayment validatablePayment = validatePayment.validate(payment);
+        assertThat(validatablePayment.isValid(), is(true));
+    }
+
+
 }

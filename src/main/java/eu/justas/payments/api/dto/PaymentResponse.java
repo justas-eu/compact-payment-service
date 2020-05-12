@@ -10,6 +10,7 @@ public class PaymentResponse {
     String currency;
     String debtorIban;
     String creditorIban;
+    String details;
     Double cancellationFee;
     LocalDateTime createdAt;
 
@@ -59,6 +60,14 @@ public class PaymentResponse {
 
     public void setCreditorIban(String creditorIban) {
         this.creditorIban = creditorIban;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 
     public Double getCancellationFee() {

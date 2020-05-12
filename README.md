@@ -7,8 +7,9 @@
 Compact RESTful web service for payments processing
 
 ## Technologies
-- Spring Boot 2.2.6
-- Swagger 
+- Spring Boot 2.2.6 https://spring.io/projects/spring-boot
+- Swagger https://swagger.io/
+- Easy Rules https://github.com/j-easy/easy-rules
 
 ## Prerequisites
 - Java 8 +

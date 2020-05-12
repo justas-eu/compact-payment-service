@@ -10,17 +10,19 @@ public class Payment {
     String currency;
     String debtorIban;
     String creditorIban;
+    String details;
     LocalDateTime createdAt = LocalDateTime.now();
 
     public Payment() {
     }
 
-    public Payment(PaymentType type, Double amount, String currency, String debtorIban, String creditorIban, LocalDateTime createdAt) {
+    public Payment(PaymentType type, Double amount, String currency, String debtorIban, String creditorIban, String details, LocalDateTime createdAt) {
         this.type = type;
         this.amount = amount;
         this.currency = currency;
         this.debtorIban = debtorIban;
         this.creditorIban = creditorIban;
+        this.details = details;
         this.createdAt = createdAt;
     }
 
@@ -72,6 +74,14 @@ public class Payment {
         this.creditorIban = creditorIban;
     }
 
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -89,6 +99,7 @@ public class Payment {
         copy.setCurrency(this.getCurrency());
         copy.setDebtorIban(this.getDebtorIban());
         copy.setCreditorIban(this.getCreditorIban());
+        copy.setDetails(this.getDetails());
         copy.setCreatedAt(this.getCreatedAt());
 
         return this;
