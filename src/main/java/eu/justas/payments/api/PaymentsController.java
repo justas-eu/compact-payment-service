@@ -7,13 +7,19 @@ import eu.justas.payments.domain.Payment;
 import eu.justas.payments.usecases.CalculateCancellationFee;
 import eu.justas.payments.usecases.CreatePayment;
 import eu.justas.payments.usecases.QueryPayments;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.security.InvalidParameterException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,16 +43,23 @@ public class PaymentsController {
     }
 
     @RequestMapping(method = POST)
-    @ResponseStatus(HttpStatus.CREATED)
-    public String create(@Valid
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Created. Payment created."),
+            @ApiResponse(code = 400, message = "Bad Request. Invalid request data.")})
+    public ResponseEntity<?> create(@Valid
                            @RequestBody CreatePaymentRequest req) {
 
-        Payment payment = createPayment.create(req.getType(),
-                                                req.getCurrency(),
-                                                req.getAmount(),
-                                                req.getDebtorIban(),
-                                                req.getCreditorIban());
-        return payment.getId();
+        Payment payment;
+        try {
+            payment = createPayment.create(req.getType(),
+                    req.getCurrency(),
+                    req.getAmount(),
+                    req.getDebtorIban(),
+                    req.getCreditorIban());
+        } catch (InvalidParameterException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(payment.getId(), HttpStatus.CREATED);
 
     }
 
