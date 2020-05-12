@@ -1,6 +1,7 @@
 package eu.justas.payments.usecases;
 
-import eu.justas.payments.domain.Payment;
+import eu.justas.payments.domain.PaymentType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -9,16 +10,22 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class CalculateCancellationFee {
 
-    private static final Double TYPE1_COEFFICIENT = 0.05;
-    private static final Double TYPE2_COEFFICIENT = 0.1;
-    private static final Double TYPE3_COEFFICIENT = 0.15;
+    @Value("${feeCoefficient.type1}")
+    private double TYPE1_COEFFICIENT = 0.05;
 
-    public Double calculate(Payment payment) {
-        Double coefficient;
+    @Value("${feeCoefficient.type2}")
+    private double TYPE2_COEFFICIENT = 0.1;
+
+    @Value("${feeCoefficient.type3}")
+    private double TYPE3_COEFFICIENT = 0.15;
+
+
+    public double calculate(LocalDateTime createdAt, PaymentType type) {
+        double coefficient;
         LocalDateTime timeNow = getNow();
-        long hoursPassed = hoursPassed(payment.getCreatedAt(), timeNow);
+        long hoursPassed = hoursPassed(createdAt, timeNow);
 
-        switch (payment.getType()) {
+        switch (type) {
             case TYPE1:
                 coefficient = TYPE1_COEFFICIENT;
                 break;
@@ -41,4 +48,5 @@ public class CalculateCancellationFee {
     private LocalDateTime getNow() {
         return LocalDateTime.now();
     }
+
 }

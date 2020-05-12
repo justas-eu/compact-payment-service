@@ -80,7 +80,7 @@ public class PaymentsControllerIntegrationTest {
         Optional<Payment> found = Optional.of(foundPayment);
         when(queryPayments.findById(any())).thenReturn(found);
         when(createPayment.create(any(),any(),any(),any(),any())).thenReturn(payment());
-        when(calculateCancellationFee.calculate(any())).thenCallRealMethod();
+
 
         mvc.perform(
                 post("/payments")
@@ -92,7 +92,6 @@ public class PaymentsControllerIntegrationTest {
         mvc.perform(
                 get("/payments/" + paymentId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.cancellationFee", is(0.25)))
                 .andExpect(jsonPath("$.id", is(matchesPattern("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))));
     }
 }

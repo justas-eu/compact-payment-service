@@ -41,17 +41,22 @@ public class PaymentsController {
     public String create(@Valid
                            @RequestBody CreatePaymentRequest req) {
 
-        Payment payment = createPayment.create(req.getType(), req.getCurrency(), req.getAmount(), req.getDebtorIban(), req.getCreditorIban());
+        Payment payment = createPayment.create(req.getType(),
+                                                req.getCurrency(),
+                                                req.getAmount(),
+                                                req.getDebtorIban(),
+                                                req.getCreditorIban());
         return payment.getId();
 
     }
 
     @RequestMapping(value="/{paymentId}", method = GET)
     public ResponseEntity<?> findById(@PathVariable("paymentId") @NotNull UUID paymentId) {
-        Optional<Payment> payment = queryPayments.findById(paymentId);
-        if (payment.isPresent()) {
-            Double  cancellationFee = calculateCancellationFee.calculate(payment.get());
-            PaymentResponse paymentResponse = PaymentConverter.convert(payment.get(), cancellationFee);
+        Optional<Payment> paymentOptional = queryPayments.findById(paymentId);
+        if (paymentOptional.isPresent()) {
+            Payment payment = paymentOptional.get();
+            double  cancellationFee = calculateCancellationFee.calculate(payment.getCreatedAt(), payment.getType());
+            PaymentResponse paymentResponse = PaymentConverter.convert(payment, cancellationFee);
             return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(String.format("Payment with id %s not found", paymentId), HttpStatus.NOT_FOUND);
