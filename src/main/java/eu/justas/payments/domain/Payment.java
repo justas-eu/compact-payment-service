@@ -1,5 +1,7 @@
 package eu.justas.payments.domain;
 
+import com.google.common.base.Objects;
+
 import java.time.LocalDateTime;
 
 public class Payment {
@@ -103,5 +105,25 @@ public class Payment {
         copy.setCreatedAt(this.getCreatedAt());
 
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Payment payment = (Payment) o;
+        return Objects.equal(id, payment.id) &&
+                type == payment.type &&
+                Objects.equal(amount, payment.amount) &&
+                Objects.equal(currency, payment.currency) &&
+                Objects.equal(debtorIban, payment.debtorIban) &&
+                Objects.equal(creditorIban, payment.creditorIban) &&
+                Objects.equal(details, payment.details) &&
+                Objects.equal(createdAt, payment.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, type, amount, currency, debtorIban, creditorIban, details, createdAt);
     }
 }
