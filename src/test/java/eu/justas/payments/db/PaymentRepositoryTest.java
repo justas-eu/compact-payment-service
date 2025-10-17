@@ -1,8 +1,8 @@
 package eu.justas.payments.db;
 
 import eu.justas.payments.domain.Payment;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -10,17 +10,17 @@ import java.util.UUID;
 import static eu.justas.payments.usecases.fixtures.PaymentFixture.payment;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PaymentRepositoryTest {
+class PaymentRepositoryTest {
 
     PaymentRepository paymentRepository;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         paymentRepository = new PaymentRepository();
     }
 
     @Test
-    public void can_add_and_find() {
+    void can_add_and_find() {
         Payment payment = payment();
         paymentRepository.add(payment);
 
@@ -30,7 +30,7 @@ public class PaymentRepositoryTest {
     }
 
     @Test
-    public void find_nothing_with_wrong_id() {
+    void find_nothing_with_wrong_id() {
         Payment payment = payment();
         paymentRepository.add(payment);
 

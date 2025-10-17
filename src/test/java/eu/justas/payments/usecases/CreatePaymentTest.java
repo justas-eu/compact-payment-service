@@ -3,27 +3,27 @@ package eu.justas.payments.usecases;
 import eu.justas.payments.db.PaymentRepository;
 import eu.justas.payments.domain.Payment;
 import eu.justas.payments.domain.PaymentType;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CreatePaymentTest {
+class CreatePaymentTest {
 
     PaymentRepository repository;
     CreatePayment createPayment;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         repository = new PaymentRepository();
         createPayment = new CreatePayment(repository);
     }
 
     @Test
-    public void can_add_payment() {
+    void can_add_payment() {
 
         String typeString = PaymentType.TYPE1.toString();
         String currency = "EUR";

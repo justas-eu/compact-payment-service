@@ -2,8 +2,8 @@ package eu.justas.payments.usecases;
 
 import eu.justas.payments.db.PaymentRepository;
 import eu.justas.payments.domain.Payment;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -11,19 +11,19 @@ import java.util.UUID;
 import static eu.justas.payments.usecases.fixtures.PaymentFixture.payment;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class QueryPaymentsTest {
+class QueryPaymentsTest {
 
     PaymentRepository repository;
     QueryPayments queryPayments;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         repository = new PaymentRepository();
         queryPayments = new QueryPayments(repository);
     }
 
     @Test
-    public void can_find_payment() {
+    void can_find_payment() {
 
         Payment payment = payment();
         repository.add(payment);

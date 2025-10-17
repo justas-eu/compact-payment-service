@@ -7,13 +7,12 @@
 Compact RESTful web service for payments processing
 
 ## Technologies
-- Spring Boot 2.2.6 https://spring.io/projects/spring-boot
+- Spring Boot https://spring.io/projects/spring-boot
 - Swagger https://swagger.io/
 - Easy Rules https://github.com/j-easy/easy-rules
 
 ## Prerequisites
-- Java 8 +
-- Maven 3
+- Java 17 +
 
 ## Installation
 ```
@@ -21,4 +20,4 @@ $ mvn clean install
 $ mvn spring-boot:run
 ```
 
-Open: http://localhost:8080/swagger-ui.html
+Open: http://localhost:8080/swagger-ui/ 

@@ -6,12 +6,12 @@ import eu.justas.payments.domain.Payment;
 import eu.justas.payments.usecases.CalculateCancellationFee;
 import eu.justas.payments.usecases.CreatePayment;
 import eu.justas.payments.usecases.QueryPayments;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
@@ -26,9 +26,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(PaymentsController.class)
-public class PaymentsControllerIntegrationTest {
+class PaymentsControllerIntegrationTest {
 
     @Autowired
     private MockMvc mvc;
@@ -43,33 +43,33 @@ public class PaymentsControllerIntegrationTest {
     private CalculateCancellationFee calculateCancellationFee;
 
     @Test
-    public void creates_payment() throws Exception {
+    void creates_payment() throws Exception {
 
         Gson gson = new Gson();
         CreatePaymentRequest paymentRequest = paymentRequest();
         String paymentRequestJsonString = gson.toJson(paymentRequest);
-        when(createPayment.create(any(),any(),any(),any(),any(), any())).thenReturn(payment());
+        when(createPayment.create(any(), any(), any(), any(), any(), any())).thenReturn(payment());
 
 
         mvc.perform(
-                post("/payments")
-                        .contentType("application/json")
-                        .content(paymentRequestJsonString))
+                        post("/payments")
+                                .contentType("application/json")
+                                .content(paymentRequestJsonString))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(is(matchesPattern("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))));
 
 
         verify(createPayment).create(
-                eq(paymentRequest.getType()),
-                eq(paymentRequest.getCurrency()),
-                eq(paymentRequest.getAmount()),
-                eq(paymentRequest.getDebtorIban()),
-                eq(paymentRequest.getCreditorIban()),
-                eq(paymentRequest.getDetails()));
+                (paymentRequest.getType()),
+                (paymentRequest.getCurrency()),
+                (paymentRequest.getAmount()),
+                (paymentRequest.getDebtorIban()),
+                (paymentRequest.getCreditorIban()),
+                (paymentRequest.getDetails()));
     }
 
     @Test
-    public void find_payment_by_id() throws Exception {
+    void find_payment_by_id() throws Exception {
 
         Gson gson = new Gson();
         CreatePaymentRequest paymentRequest = paymentRequest();
@@ -80,18 +80,18 @@ public class PaymentsControllerIntegrationTest {
 
         Optional<Payment> found = Optional.of(foundPayment);
         when(queryPayments.findById(any())).thenReturn(found);
-        when(createPayment.create(any(),any(),any(),any(),any(), any())).thenReturn(payment());
+        when(createPayment.create(any(), any(), any(), any(), any(), any())).thenReturn(payment());
 
 
         mvc.perform(
-                post("/payments")
-                        .contentType("application/json")
-                        .content(paymentRequestJsonString))
+                        post("/payments")
+                                .contentType("application/json")
+                                .content(paymentRequestJsonString))
                 .andExpect(status().isCreated());
 
         String paymentId = UUID.randomUUID().toString();
         mvc.perform(
-                get("/payments/" + paymentId))
+                        get("/payments/" + paymentId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(matchesPattern("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))));
     }
